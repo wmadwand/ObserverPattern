@@ -112,9 +112,9 @@ namespace Observer
         }
     }
 
-    class Program
+    class Program2
     {
-        static void Main(string[] args)
+        static void Main2(string[] args)
         {
             Stock stock = new Stock();
             Bank bank = new Bank("ЮнитБанк", stock);

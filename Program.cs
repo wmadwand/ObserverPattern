@@ -2,9 +2,9 @@
 
 namespace Observer
 {
-    class Program
+    class Progra1
     {
-        static void Main(string[] args)
+        static void Main1(string[] args)
         {
             Console.WriteLine("Hello World!");
         }
