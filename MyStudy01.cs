@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 namespace ObserverMS01
 {
+    // Observer
     public interface IObserver
     {
         void Update(Object obj);
     }
 
+    // Subject
     public interface IObservable
     {
-        void AddObserver(IObserver observer);
-        void RemoveObserver(IObserver observer);
+        void Attach(IObserver observer);
+        void Detach(IObserver observer);
         void Notify();
     }
 
@@ -32,28 +34,26 @@ namespace ObserverMS01
             _currencyInfo = new CurrencyInfo();
         }
 
-        public void AddObserver(IObserver observer)
+        public void Attach(IObserver observer)
         {
             _observers.Add(observer);
         }
 
-        public void RemoveObserver(IObserver observer)
+        public void Detach(IObserver observer)
         {
             _observers.Remove(observer);
         }
 
         public void Notify()
         {
-            foreach (IObserver item in _observers)
-            {
-                item.Update(_currencyInfo);
-            }
+            _observers.ForEach(x => x.Update(_currencyInfo));
         }
 
         public void RunMarket()
         {
             _currencyInfo.USD = 45;
             _currencyInfo.Eur = 75;
+
             Notify();
         }
     }
@@ -69,9 +69,10 @@ namespace ObserverMS01
             this.name = name;
             _subject = subject;
 
-            _subject.AddObserver(this);
+            _subject.Attach(this);
         }
 
+        // PUSH-model
         public void Update(object obj)
         {
             CurrencyInfo info = (CurrencyInfo)obj;
@@ -82,9 +83,16 @@ namespace ObserverMS01
             }
         }
 
+        // PULL-model
+        public void Update(Stock stock)
+        {
+            // pull some required info from stock parameter
+            // instead of having all the info all the time with no purpose
+        }
+
         public void StopTrade()
         {
-            _subject.RemoveObserver(this);
+            _subject.Detach(this);
             _subject = null;
         }
     }
@@ -98,7 +106,7 @@ namespace ObserverMS01
         {
             this.name = name;
             _subject = subject;
-            _subject.AddObserver(this);
+            _subject.Attach(this);
         }
 
         public void Update(object obj)
